@@ -5,7 +5,7 @@
 
 // token
 
-const char *TYPES_FORMAT[] = {"Integer", "Operator", "LParen", "RParen"};
+const char *TYPES_FORMAT[] = {"Integer", "Operator", "LParen", "RParen", "EOF"};
 
 const char *token_display(token *tok) {
   const char *fmt = TYPES_FORMAT[tok->tty];
@@ -44,7 +44,7 @@ void token_pushBuffer(tokensBuffer *buf, token tok) {
   buf->len += 1;
 
   if (buf->len > buf->capacity) {
-    buf->capacity += 1;
+    buf->capacity = buf->len;
 
     token *ptr = (token *)realloc(buf->ptr, sizeof(token) * buf->capacity);
 

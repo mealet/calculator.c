@@ -1,19 +1,26 @@
 #include "lexer/lexer.h"
 #include "lexer/token.h"
+
+/* #include "parser/ast.h" */
+#include "parser/parser.h"
+
 #include "utils/stringBuffer.h"
 
 #include <stdio.h>
 
 int main() {
-  char *input = "1 + (1 * 2)";
+  char *input = "1";
 
-  tokensBuffer tokens = lexer_tokenize(input);
+  __attribute__((cleanup(token_freeBuffer))) tokensBuffer tokens =
+      lexer_tokenize(input);
 
   size_t i;
   for (i = 0; i < tokens.len; i++) {
     token *tok = token_peekBuffer(&tokens, i);
-    printf("`%s`: %s\n", tok->value.ptr, token_display(tok));
+    printf("| `%s`: %s ", tok->value.ptr, token_display(tok));
   }
+  printf("|\n");
 
+  parser parser = parser_new(tokens);
   return 0;
 }

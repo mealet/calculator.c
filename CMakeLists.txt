@@ -5,9 +5,10 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_C_COMPILER clang)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 -Wall -Wextra -Wconversion -Wdouble-promotion -Wno-unused-parameter -Wno-unused-function -Wno-sign-conversion -fsanitize=undefined -fsanitize-trap")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 -Wall -Wextra -Wconversion -Wdouble-promotion -Wno-unused-parameter -Wno-unused-function -Wno-sign-conversion -fsanitize=undefined -fsanitize-trap -fPIE")
 
 add_subdirectory(src/lexer)
+add_subdirectory(src/parser)
 add_subdirectory(src/utils)
 
 add_executable(
@@ -15,4 +16,8 @@ add_executable(
   src/main.c
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE lexer utils)
+target_link_libraries(
+  ${PROJECT_NAME}
+  PUBLIC
+  lexer parser utils
+)

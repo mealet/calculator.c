@@ -5,7 +5,7 @@
 #include "../utils/stringBuffer.h"
 #include "token.h"
 
-char next(size_t *pos, stringBuffer *buf) {
+char next_char(size_t *pos, stringBuffer *buf) {
   *pos += 1;
   return strbuf_getc(buf, *pos);
 }
@@ -20,7 +20,7 @@ tokensBuffer lexer_tokenize(char *input) {
   while (current != '\0') {
     // whitespace
     if (current == ' ') {
-      current = next(&position, &inp);
+      current = next_char(&position, &inp);
     }
 
     // integer
@@ -29,7 +29,7 @@ tokensBuffer lexer_tokenize(char *input) {
 
       while (current >= '0' && current <= '9' && current != '\0') {
         strbuf_push(&value, current);
-        current = next(&position, &inp);
+        current = next_char(&position, &inp);
       }
 
       token_pushBuffer(&buf, (token){.value = value, .tty = Integer});
@@ -43,7 +43,7 @@ tokensBuffer lexer_tokenize(char *input) {
       strbuf_push(&value, current);
 
       token_pushBuffer(&buf, (token){.value = value, .tty = Operator});
-      current = next(&position, &inp);
+      current = next_char(&position, &inp);
 
       continue;
     }
@@ -57,7 +57,7 @@ tokensBuffer lexer_tokenize(char *input) {
       tokenType tty = current == '(' ? LParen : RParen;
 
       token_pushBuffer(&buf, (token){.value = value, .tty = tty});
-      current = next(&position, &inp);
+      current = next_char(&position, &inp);
 
       continue;
     }

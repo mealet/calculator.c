@@ -10,7 +10,7 @@ typedef enum {
   Operator, // +
 
   LParen, // (
-  RParen  // )
+  RParen, // )
 } tokenType;
 
 typedef struct {

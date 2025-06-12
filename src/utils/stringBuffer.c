@@ -29,7 +29,7 @@ void strbuf_push(stringBuffer *buf, char chr) {
   buf->len += 1;
 
   if (buf->len > buf->capacity) {
-    buf->capacity += 1;
+    buf->capacity = buf->len;
 
     char *ptr = (char *)realloc(buf->ptr, sizeof(char) * buf->capacity);
 
@@ -42,6 +42,8 @@ void strbuf_push(stringBuffer *buf, char chr) {
 
   buf->ptr[buf->len - 1] = chr;
 }
+
+char *strbuf_get(stringBuffer *buf) { return buf->ptr; }
 
 char strbuf_getc(stringBuffer *buf, size_t position) {
   if (position >= buf->len) {
