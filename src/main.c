@@ -5,7 +5,15 @@
 #include <stdio.h>
 
 int main() {
-  printf("Hello World!\n");
+  char *input = "1 + (1 * 2)";
+
+  tokensBuffer tokens = lexer_tokenize(input);
+
+  size_t i;
+  for (i = 0; i < tokens.len; i++) {
+    token *tok = token_peekBuffer(&tokens, i);
+    printf("`%s`: %s\n", tok->value.ptr, token_display(tok));
+  }
 
   return 0;
 }

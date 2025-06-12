@@ -3,6 +3,6 @@
 
 #include "token.h"
 
-tokensBuffer tokenize(char *input);
+tokensBuffer lexer_tokenize(char *input);
 
 #endif

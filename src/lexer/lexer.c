@@ -10,7 +10,7 @@ char next(size_t *pos, stringBuffer *buf) {
   return strbuf_getc(buf, *pos);
 }
 
-tokensBuffer tokenize(char *input) {
+tokensBuffer lexer_tokenize(char *input) {
   tokensBuffer buf = token_newBuffer();
   stringBuffer inp = strbuf_from(input);
 
@@ -21,7 +21,6 @@ tokensBuffer tokenize(char *input) {
     // whitespace
     if (current == ' ') {
       current = next(&position, &inp);
-      continue;
     }
 
     // integer
@@ -34,7 +33,6 @@ tokensBuffer tokenize(char *input) {
       }
 
       token_pushBuffer(&buf, (token){.value = value, .tty = Integer});
-      current = next(&position, &inp);
 
       continue;
     }
@@ -52,6 +50,7 @@ tokensBuffer tokenize(char *input) {
 
     // parentheses
     if (current == '(' || current == ')') {
+
       stringBuffer value = strbuf_new();
       strbuf_push(&value, current);
 

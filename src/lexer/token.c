@@ -3,6 +3,17 @@
 
 #include "token.h"
 
+// token
+
+const char *TYPES_FORMAT[] = {"Integer", "Operator", "LParen", "RParen"};
+
+const char *token_display(token *tok) {
+  const char *fmt = TYPES_FORMAT[tok->tty];
+  return fmt;
+}
+
+// buffer
+
 tokensBuffer token_newBuffer() {
   token *ptr = (token *)malloc(sizeof(token));
 

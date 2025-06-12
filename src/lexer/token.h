@@ -18,6 +18,8 @@ typedef struct {
   tokenType tty;
 } token;
 
+const char *token_display(token *tok);
+
 // buffer
 
 typedef struct {
