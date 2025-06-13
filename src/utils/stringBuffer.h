@@ -1,6 +1,8 @@
 #ifndef CALCULATOR_UTILS_INPUTBUFFER_H_
 #define CALCULATOR_UTILS_INPUTBUFFER_H_
 
+// NOTE: This string buffer is some kind of dynamic string for the tokens
+
 #include <stddef.h>
 
 typedef struct {

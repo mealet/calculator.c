@@ -1,3 +1,14 @@
+// calculator - by mealet
+// https://github.com/mealet/calculator.c
+// Project is licensed under the MIT LICENSE
+//
+// This is a pet-project made just for fun. I`m NOT pro in C and this code is
+// NOT good example. I tried to prevent all memory leaks by wrapping heap
+// pointers with structures and auto deallocate attributes.
+//
+// Sometimes code may look strange, but remember that it works!
+// Anyway I hope your eyes won't start bleeding while reading my code :D
+
 #include "lexer/lexer.h"
 #include "lexer/token.h"
 

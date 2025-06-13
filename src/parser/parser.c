@@ -170,7 +170,7 @@ astNode term(parser *parser) {
   return node;
 }
 
-// cleanup
+// cleanup (prevent memory leaks)
 
 void cleanup_ast(astNode *ast) {
   switch (ast->type) {
@@ -198,6 +198,7 @@ void cleanup_ast(astNode *ast) {
   }
 }
 
+// for debugging, but this looks awful, so...
 void debug_ast(astNode *ast) {
   switch (ast->type) {
   case Number: {

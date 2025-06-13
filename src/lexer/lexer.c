@@ -10,6 +10,7 @@ char next_char(size_t *pos, stringBuffer *buf) {
   return strbuf_getc(buf, *pos);
 }
 
+// main lexer function
 tokensBuffer lexer_tokenize(char *input) {
   tokensBuffer buf = token_newBuffer();
   stringBuffer inp = strbuf_from(input);
