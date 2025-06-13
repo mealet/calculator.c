@@ -41,14 +41,80 @@ token *current_token(parser *parser) {
 
 // expressions
 
-astNode term(parser *parser) {
+astNode expression(parser *parser) {
+  astNode node = term(parser);
   token *cur = current_token(parser);
 
   if (parser->is_eof) {
-    return (astNode){};
+    return node;
   }
 
+  if (node.type == None) {
+    return node;
+  }
+
+  switch (cur->tty) {
+  case Operator: {
+    char operand = strbuf_getc(&cur->value, 0);
+    next_token(parser);
+
+    astNode *lhs = (astNode *)malloc(sizeof(astNode));
+    *lhs = node;
+
+    astNode *rhs = (astNode *)malloc(sizeof(astNode));
+    *rhs = expression(parser);
+
+    if (rhs->type == None) {
+      fprintf(stderr, "Wrong expression provided\n");
+
+      cleanup_ast(lhs);
+      cleanup_ast(rhs);
+
+      free(lhs);
+      free(rhs);
+    } else {
+
+      if ((operand == '*' || operand == '/') && (rhs->type == Binary)) {
+        astNode *new_node = rhs;
+        astNode *old_lhs = lhs;
+
+        astNode *rhs_new = new_node->lhs;
+
+        astNode *priority_node = (astNode *)malloc(sizeof(astNode));
+        *priority_node = (astNode){
+            .type = Binary, .operand = operand, .lhs = old_lhs, .rhs = rhs_new};
+
+        node = (astNode){.type = Binary,
+                         .operand = new_node->operand,
+                         .lhs = priority_node,
+                         .rhs = rhs_new};
+      } else {
+        node = (astNode){
+            .type = Binary, .operand = operand, .lhs = lhs, .rhs = rhs};
+      }
+    }
+  } break;
+
+  default: {
+    fprintf(stderr, "Undefined token in expression found: %s\n",
+            token_display(cur));
+    next_token(parser);
+
+    node = (astNode){.type = None};
+  } break;
+  }
+
+  return node;
+}
+
+astNode term(parser *parser) {
+  token *cur = current_token(parser);
+
   astNode node = {.type = None};
+
+  if (parser->is_eof) {
+    return node;
+  }
 
   switch (cur->tty) {
   case Integer: {
@@ -67,7 +133,7 @@ astNode term(parser *parser) {
 
       node = (astNode){.type = Unary, operand = '-', .lhs = expr};
     } else {
-      fprintf(stderr, "Unary operations only allowed with minus `-`");
+      fprintf(stderr, "Unary operations only allowed with minus `-`\n");
       next_token(parser);
     }
   } break;
@@ -101,5 +167,35 @@ void cleanup_ast(astNode *ast) {
     if (ast->rhs)
       free(ast->rhs);
   } break;
+  }
+}
+
+void debug_ast(astNode *ast) {
+  switch (ast->type) {
+  case Number: {
+    printf("NUMBER: %d\n", ast->integer);
+  } break;
+
+  case None: {
+    printf("NONE\n");
+  } break;
+
+  case Unary: {
+    printf("UNARY `%c`\n\n", ast->operand);
+    debug_ast(ast->lhs);
+    printf("\nUNARY END\n");
+  } break;
+
+  case Binary: {
+    printf("BINARY `%c`\n", ast->operand);
+
+    printf("\nLHS:\n");
+    debug_ast(ast->lhs);
+
+    printf("\nRHS:\n");
+    debug_ast(ast->rhs);
+
+    printf("\nBINARY END\n");
+  }
   }
 }

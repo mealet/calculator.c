@@ -28,5 +28,6 @@ typedef struct Node {
 } astNode;
 
 void cleanup_ast(astNode *ast);
+void debug_ast(astNode *ast);
 
 #endif
