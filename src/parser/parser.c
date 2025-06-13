@@ -95,6 +95,10 @@ astNode expression(parser *parser) {
     }
   } break;
 
+  case RParen: {
+    return node;
+  } break;
+
   default: {
     fprintf(stderr, "Undefined token in expression found: %s\n",
             token_display(cur));
@@ -132,9 +136,29 @@ astNode term(parser *parser) {
       *expr = term(parser);
 
       node = (astNode){.type = Unary, operand = '-', .lhs = expr};
+      next_token(parser);
     } else {
       fprintf(stderr, "Unary operations only allowed with minus `-`\n");
       next_token(parser);
+    }
+  } break;
+
+  case LParen: {
+    cur = next_token(parser);
+
+    if (cur->tty == RParen) {
+      fprintf(stderr, "Empty parentheses found");
+      next_token(parser);
+    } else {
+      astNode *expr = (astNode *)malloc(sizeof(astNode));
+      *expr = expression(parser);
+
+      node = (astNode){.type = Paren, .lhs = expr};
+
+      cur = current_token(parser);
+      if (cur->tty == RParen) {
+        next_token(parser);
+      }
     }
   } break;
 
@@ -167,6 +191,11 @@ void cleanup_ast(astNode *ast) {
     if (ast->rhs)
       free(ast->rhs);
   } break;
+
+  case Paren: {
+    if (ast->lhs)
+      free(ast->lhs);
+  } break;
   }
 }
 
@@ -197,5 +226,13 @@ void debug_ast(astNode *ast) {
 
     printf("\nBINARY END\n");
   }
+
+  case Paren: {
+    printf("-- PAREN START --\n\n");
+
+    debug_ast(ast->lhs);
+
+    printf("\n\n-- PAREN END --\n");
+  } break;
   }
 }

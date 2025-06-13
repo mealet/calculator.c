@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 int main() {
-  char *input = "2 * 2";
+  char *input = "2 * (1 + 1)";
 
   __attribute__((cleanup(token_freeBuffer))) tokensBuffer tokens =
       lexer_tokenize(input);
@@ -22,11 +22,7 @@ int main() {
   printf("|\n\n");
 
   parser parser = parser_new(tokens);
-  astNode expr = expression(&parser);
-
-  debug_ast(&expr);
-
-  cleanup_ast(&expr);
+  __attribute__((cleanup(cleanup_ast))) astNode expr = expression(&parser);
 
   return 0;
 }

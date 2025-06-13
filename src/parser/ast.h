@@ -13,6 +13,7 @@ typedef enum {
 
   Unary,
   Binary,
+  Paren,
 
   None
 } exprType;
