@@ -2,8 +2,8 @@
 // https://github.com/mealet/calculator.c
 // Project is licensed under the MIT LICENSE
 //
-// This is a pet-project made just for fun. I`m NOT pro in C and this code is
-// NOT good example. I tried to prevent all memory leaks by wrapping heap
+// This is a pet-project made just for fun. I`m NOT a pro in C and this code is
+// NOT a good example. I tried to prevent all memory leaks by wrapping heap
 // pointers with structures and auto deallocate attributes.
 //
 // Sometimes code may look strange, but remember that it works!
@@ -57,13 +57,17 @@ int main() {
       __attribute__((cleanup(token_freeBuffer))) tokensBuffer tokens =
           lexer_tokenize(input);
 
+      if (tokens.len < 1) {
+        continue;
+      }
+
       // parsing with parser
       parser parser = parser_new(tokens);
       __attribute__((cleanup(cleanup_ast))) astNode expr =
           parser_parse(&parser);
 
       if (expr.type == None) {
-        return 1;
+        continue;
       }
 
       // and then evaluating the result

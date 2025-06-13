@@ -64,7 +64,8 @@ tokensBuffer lexer_tokenize(char *input) {
     }
 
     fprintf(stderr, "Undefined character found: %c\n", current);
-    exit(1);
+    token_freeBuffer(&buf);
+    return (tokensBuffer)token_newBuffer();
   }
 
   return buf;
