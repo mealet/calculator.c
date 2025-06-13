@@ -8,6 +8,8 @@
 //
 // Sometimes code may look strange, but remember that it works!
 // Anyway I hope your eyes won't start bleeding while reading my code :D
+//
+// P.S. To exit CLI just type `exit` and press enter
 
 #include "lexer/lexer.h"
 #include "lexer/token.h"
