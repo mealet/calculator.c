@@ -14,8 +14,7 @@ parser parser_new(tokensBuffer tokens) {
                   .is_eof = false};
 }
 
-// TODO: Implement main parser function
-astNode parser_parse(parser *parser);
+astNode parser_parse(parser *parser) { return expression(parser); }
 
 // tech
 

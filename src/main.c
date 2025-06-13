@@ -4,6 +4,7 @@
 #include "parser/ast.h"
 #include "parser/parser.h"
 
+#include "interpreter/interpreter.h"
 #include "utils/stringBuffer.h"
 
 #include <stdio.h>
@@ -22,7 +23,14 @@ int main() {
   printf("|\n\n");
 
   parser parser = parser_new(tokens);
-  __attribute__((cleanup(cleanup_ast))) astNode expr = expression(&parser);
+  __attribute__((cleanup(cleanup_ast))) astNode expr = parser_parse(&parser);
+
+  if (expr.type == None) {
+    return 1;
+  }
+
+  uint32_t result = interpreter_eval(&expr);
+  printf("RESULT: %d\n", result);
 
   return 0;
 }

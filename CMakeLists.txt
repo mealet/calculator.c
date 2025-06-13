@@ -9,6 +9,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 -Wall -Wextra -Wconversion -Wdouble-prom
 
 add_subdirectory(src/lexer)
 add_subdirectory(src/parser)
+add_subdirectory(src/interpreter)
 add_subdirectory(src/utils)
 
 add_executable(
@@ -19,5 +20,5 @@ add_executable(
 target_link_libraries(
   ${PROJECT_NAME}
   PUBLIC
-  lexer parser utils
+  lexer parser interpreter utils
 )
